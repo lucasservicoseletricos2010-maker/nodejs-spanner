@@ -24,6 +24,7 @@ import {GrpcService} from '../src/common-grpc/service';
 import {google} from '../protos/protos';
 import {GoogleError} from 'google-gax';
 import {util} from 'protobufjs';
+import {v4 as uuidv4} from 'uuid';
 import Long = util.Long;
 const singer = require('./data/singer');
 const music = singer.examples.spanner.music;
@@ -149,6 +150,22 @@ describe('codec', () => {
         const json = date.toJSON();
         assert.strictEqual(json, '0954-12-31');
       });
+    });
+  });
+
+  describe('UUID', () => {
+    it('should store the value', () => {
+      const value = uuidv4();
+      const uuid = new codec.UUID(value);
+
+      assert.strictEqual(uuid.value, value);
+    });
+
+    it('should return as a uuid', () => {
+      const value = uuidv4();
+      const uuid = new codec.UUID(value);
+
+      assert.strictEqual(uuid.valueOf(), String(value));
     });
   });
 
@@ -680,6 +697,17 @@ describe('codec', () => {
       assert.deepStrictEqual(decoded, expected);
     });
 
+    it('should decode UUID', () => {
+      const value = uuidv4();
+
+      const decoded = codec.decode(value, {
+        code: google.spanner.v1.TypeCode.UUID,
+      });
+
+      assert(decoded instanceof codec.UUID);
+      assert.strictEqual(decoded.value, value);
+    });
+
     it.skip('should decode FLOAT32', () => {
       const value = 'Infinity';
 
@@ -1070,6 +1098,15 @@ describe('codec', () => {
       assert.strictEqual(encoded, '10');
     });
 
+    it('should encode UUID', () => {
+      const random = uuidv4();
+      const value = new codec.UUID(random);
+
+      const encoded = codec.encode(value);
+
+      assert.strictEqual(encoded, random);
+    });
+
     it.skip('should encode FLOAT32', () => {
       const value = new codec.Float32(10);
 
@@ -1162,6 +1199,12 @@ describe('codec', () => {
       assert.deepStrictEqual(codec.getType(2.2), {type: 'float64'});
       assert.deepStrictEqual(codec.getType(new codec.Float(1.1)), {
         type: 'float64',
+      });
+    });
+
+    it('should determine if the value is a uuid', () => {
+      assert.deepStrictEqual(codec.getType(new codec.UUID(uuidv4())), {
+        type: 'uuid',
       });
     });
 
@@ -1316,6 +1359,9 @@ describe('codec', () => {
           code: google.spanner.v1.TypeCode[
             google.spanner.v1.TypeCode.TYPE_CODE_UNSPECIFIED
           ],
+        },
+        uuid: {
+          code: google.spanner.v1.TypeCode[google.spanner.v1.TypeCode.UUID],
         },
         bool: {
           code: google.spanner.v1.TypeCode[google.spanner.v1.TypeCode.BOOL],

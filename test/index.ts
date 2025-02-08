@@ -84,6 +84,7 @@ const fakePfy = extend({}, pfy, {
     promisified = true;
     assert.deepStrictEqual(options.exclude, [
       'date',
+      'uuid',
       'float32',
       'float',
       'instance',
@@ -514,6 +515,23 @@ describe('Spanner', () => {
 
       const float = Spanner.float(value);
       assert.strictEqual(float, customValue);
+    });
+  });
+
+  describe('uuid', () => {
+    it('should create a UUID instance', () => {
+      const value = {};
+      const customValue = {};
+
+      fakeCodec.UUID = class {
+        constructor(value_) {
+          assert.strictEqual(value_, value);
+          return customValue;
+        }
+      };
+
+      const uuid = Spanner.uuid(value);
+      assert.strictEqual(uuid, customValue);
     });
   });
 

@@ -143,6 +143,20 @@ export class SpannerDate extends Date {
 }
 
 /**
+ * @typedef UUID
+ * @see Spanner.uuid
+ */
+export class UUID {
+  value: string;
+  constructor(value: string) {
+    this.value = value;
+  }
+  valueOf(): string {
+    return String(this.value);
+  }
+}
+
+/**
  * Using an abstract class to simplify checking for wrapped numbers.
  *
  * @private
@@ -529,6 +543,10 @@ function decode(
         enumObject: columnMetadata as object,
       });
       break;
+    case spannerClient.spanner.v1.TypeCode.UUID:
+    case 'UUID':
+      decoded = new UUID(decoded);
+      break;
     case spannerClient.spanner.v1.TypeCode.FLOAT32:
     case 'FLOAT32':
       decoded = new Float32(decoded);
@@ -665,6 +683,10 @@ function encodeValue(value: Value): Value {
     return value.value;
   }
 
+  if (value instanceof UUID) {
+    return value.value;
+  }
+
   if (value instanceof Struct) {
     return Array.from(value).map(field => encodeValue(field.value));
   }
@@ -697,6 +719,7 @@ const TypeCode: {
   bool: 'BOOL',
   int64: 'INT64',
   pgOid: 'INT64',
+  uuid: 'UUID',
   float32: 'FLOAT32',
   float64: 'FLOAT64',
   numeric: 'NUMERIC',
@@ -773,6 +796,10 @@ interface FieldType extends Type {
 function getType(value: Value): Type {
   const isSpecialNumber =
     is.infinite(value) || (is.number(value) && isNaN(value));
+
+  if (value instanceof UUID) {
+    return {type: 'uuid'};
+  }
 
   if (value instanceof Float32) {
     return {type: 'float32'};
@@ -969,6 +996,7 @@ export const codec = {
   convertProtoTimestampToDate,
   createTypeObject,
   SpannerDate,
+  UUID,
   Float32,
   Float,
   Int,
