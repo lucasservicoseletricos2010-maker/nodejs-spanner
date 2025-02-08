@@ -21,6 +21,7 @@ import * as is from 'is';
 import {common as p} from 'protobufjs';
 import {google as spannerClient} from '../protos/protos';
 import {GoogleError} from 'google-gax';
+import * as uuid from 'uuid';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Value = any;
@@ -139,20 +140,6 @@ export class SpannerDate extends Date {
       2,
       '0'
     )}`;
-  }
-}
-
-/**
- * @typedef UUID
- * @see Spanner.uuid
- */
-export class UUID {
-  value: string;
-  constructor(value: string) {
-    this.value = value;
-  }
-  valueOf(): string {
-    return String(this.value);
   }
 }
 
@@ -543,10 +530,6 @@ function decode(
         enumObject: columnMetadata as object,
       });
       break;
-    case spannerClient.spanner.v1.TypeCode.UUID:
-    case 'UUID':
-      decoded = new UUID(decoded);
-      break;
     case spannerClient.spanner.v1.TypeCode.FLOAT32:
     case 'FLOAT32':
       decoded = new Float32(decoded);
@@ -683,10 +666,6 @@ function encodeValue(value: Value): Value {
     return value.value;
   }
 
-  if (value instanceof UUID) {
-    return value.value;
-  }
-
   if (value instanceof Struct) {
     return Array.from(value).map(field => encodeValue(field.value));
   }
@@ -760,6 +739,7 @@ interface FieldType extends Type {
 /**
  * @typedef {object} ParamType
  * @property {string} type The param type. Must be one of the following:
+ *     - uuid
  *     - float32
  *     - float64
  *     - int64
@@ -796,10 +776,6 @@ interface FieldType extends Type {
 function getType(value: Value): Type {
   const isSpecialNumber =
     is.infinite(value) || (is.number(value) && isNaN(value));
-
-  if (value instanceof UUID) {
-    return {type: 'uuid'};
-  }
 
   if (value instanceof Float32) {
     return {type: 'float32'};
@@ -839,6 +815,10 @@ function getType(value: Value): Type {
 
   if (is.boolean(value)) {
     return {type: 'bool'};
+  }
+
+  if (uuid.validate(value)) {
+    return {type: 'unspecified'};
   }
 
   if (is.string(value)) {
@@ -996,7 +976,6 @@ export const codec = {
   convertProtoTimestampToDate,
   createTypeObject,
   SpannerDate,
-  UUID,
   Float32,
   Float,
   Int,

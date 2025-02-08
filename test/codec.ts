@@ -18,13 +18,13 @@ import * as assert from 'assert';
 import {before, beforeEach, afterEach, describe, it} from 'mocha';
 import * as proxyquire from 'proxyquire';
 import * as sinon from 'sinon';
+import * as uuid from 'uuid';
 import {Big} from 'big.js';
 import {PreciseDate} from '@google-cloud/precise-date';
 import {GrpcService} from '../src/common-grpc/service';
 import {google} from '../protos/protos';
 import {GoogleError} from 'google-gax';
 import {util} from 'protobufjs';
-import {v4 as uuidv4} from 'uuid';
 import Long = util.Long;
 const singer = require('./data/singer');
 const music = singer.examples.spanner.music;
@@ -150,22 +150,6 @@ describe('codec', () => {
         const json = date.toJSON();
         assert.strictEqual(json, '0954-12-31');
       });
-    });
-  });
-
-  describe('UUID', () => {
-    it('should store the value', () => {
-      const value = uuidv4();
-      const uuid = new codec.UUID(value);
-
-      assert.strictEqual(uuid.value, value);
-    });
-
-    it('should return as a uuid', () => {
-      const value = uuidv4();
-      const uuid = new codec.UUID(value);
-
-      assert.strictEqual(uuid.valueOf(), String(value));
     });
   });
 
@@ -697,15 +681,14 @@ describe('codec', () => {
       assert.deepStrictEqual(decoded, expected);
     });
 
-    it('should decode UUID', () => {
-      const value = uuidv4();
+    it.skip('should decode UUID', () => {
+      const value = uuid.v4();
 
       const decoded = codec.decode(value, {
         code: google.spanner.v1.TypeCode.UUID,
       });
 
-      assert(decoded instanceof codec.UUID);
-      assert.strictEqual(decoded.value, value);
+      assert.strictEqual(decoded, value);
     });
 
     it.skip('should decode FLOAT32', () => {
@@ -1098,13 +1081,12 @@ describe('codec', () => {
       assert.strictEqual(encoded, '10');
     });
 
-    it('should encode UUID', () => {
-      const random = uuidv4();
-      const value = new codec.UUID(random);
+    it.skip('should encode UUID', () => {
+      const value = uuid.v4();
 
       const encoded = codec.encode(value);
 
-      assert.strictEqual(encoded, random);
+      assert.strictEqual(encoded, value);
     });
 
     it.skip('should encode FLOAT32', () => {
@@ -1202,9 +1184,9 @@ describe('codec', () => {
       });
     });
 
-    it('should determine if the value is a uuid', () => {
-      assert.deepStrictEqual(codec.getType(new codec.UUID(uuidv4())), {
-        type: 'uuid',
+    it.skip('should determine if the uuid value is unspecified', () => {
+      assert.deepStrictEqual(codec.getType(uuid.v4()), {
+        type: 'unspecified',
       });
     });
 

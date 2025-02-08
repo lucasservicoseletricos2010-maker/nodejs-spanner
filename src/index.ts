@@ -26,7 +26,6 @@ import * as streamEvents from 'stream-events';
 import * as through from 'through2';
 import {
   codec,
-  UUID,
   Float32,
   Float,
   Int,
@@ -1706,23 +1705,6 @@ class Spanner extends GrpcService {
   }
 
   /**
-   * Helper function to get a Cloud Spanner UUID object.
-   *
-   * @param {string} value The uuid as a string.
-   * @returns {UUID}
-   *
-   * @example
-   * ```
-   * const {Spanner} = require('@google-cloud/spanner');
-   * const value = uuidv4();
-   * const uuid = Spanner.uuid(value);
-   * ```
-   */
-  static uuid(value): UUID {
-    return new codec.UUID(value);
-  }
-
-  /**
    * Helper function to get a Cloud Spanner Float32 object.
    *
    * @param {string|number} value The float as a number or string.
@@ -1909,7 +1891,6 @@ class Spanner extends GrpcService {
 promisifyAll(Spanner, {
   exclude: [
     'date',
-    'uuid',
     'float32',
     'float',
     'instance',
@@ -2089,5 +2070,5 @@ import * as protos from '../protos/protos';
 import IInstanceConfig = instanceAdmin.spanner.admin.instance.v1.IInstanceConfig;
 export {v1, protos};
 export default {Spanner};
-export {UUID, Float32, Float, Int, Struct, Numeric, PGNumeric, SpannerDate};
+export {Float32, Float, Int, Struct, Numeric, PGNumeric, SpannerDate};
 export {ObservabilityOptions};
