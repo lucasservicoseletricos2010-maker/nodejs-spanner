@@ -647,7 +647,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.instance.v1.InstanceConfig|InstanceConfig}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getInstanceConfig(
@@ -792,7 +792,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   deleteInstanceConfig(
@@ -923,7 +923,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.instance.v1.Instance|Instance}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getInstance(
@@ -1053,7 +1053,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   deleteInstance(
@@ -1194,7 +1194,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.iam.v1.Policy|Policy}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   setIamPolicy(
@@ -1308,7 +1308,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.iam.v1.Policy|Policy}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getIamPolicy(
@@ -1425,7 +1425,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.iam.v1.TestIamPermissionsResponse|TestIamPermissionsResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   testIamPermissions(
@@ -1533,7 +1533,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.instance.v1.InstancePartition|InstancePartition}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getInstancePartition(
@@ -1671,7 +1671,7 @@ export class InstanceAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   deleteInstancePartition(
@@ -1854,7 +1854,7 @@ export class InstanceAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   createInstanceConfig(
@@ -1979,7 +1979,7 @@ export class InstanceAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkCreateInstanceConfigProgress(
@@ -2078,7 +2078,7 @@ export class InstanceAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   updateInstanceConfig(
@@ -2203,7 +2203,7 @@ export class InstanceAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkUpdateInstanceConfigProgress(
@@ -2284,7 +2284,7 @@ export class InstanceAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   createInstance(
@@ -2409,7 +2409,7 @@ export class InstanceAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkCreateInstanceProgress(
@@ -2496,7 +2496,7 @@ export class InstanceAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   updateInstance(
@@ -2621,7 +2621,7 @@ export class InstanceAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkUpdateInstanceProgress(
@@ -2707,7 +2707,7 @@ export class InstanceAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   createInstancePartition(
@@ -2832,7 +2832,7 @@ export class InstanceAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkCreateInstancePartitionProgress(
@@ -2924,7 +2924,7 @@ export class InstanceAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   updateInstancePartition(
@@ -3049,7 +3049,7 @@ export class InstanceAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkUpdateInstancePartitionProgress(
@@ -3153,7 +3153,7 @@ export class InstanceAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   moveInstance(
@@ -3278,7 +3278,7 @@ export class InstanceAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkMoveInstanceProgress(
@@ -3334,7 +3334,7 @@ export class InstanceAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listInstanceConfigsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstanceConfigs(
@@ -3464,7 +3464,7 @@ export class InstanceAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listInstanceConfigsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstanceConfigsStream(
@@ -3517,7 +3517,7 @@ export class InstanceAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.admin.instance.v1.InstanceConfig|InstanceConfig}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstanceConfigsAsync(
@@ -3623,7 +3623,7 @@ export class InstanceAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listInstanceConfigOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstanceConfigOperations(
@@ -3796,7 +3796,7 @@ export class InstanceAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listInstanceConfigOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstanceConfigOperationsStream(
@@ -3892,7 +3892,7 @@ export class InstanceAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.longrunning.Operation|Operation}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstanceConfigOperationsAsync(
@@ -3971,7 +3971,7 @@ export class InstanceAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listInstancesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstances(
@@ -4127,7 +4127,7 @@ export class InstanceAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listInstancesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancesStream(
@@ -4206,7 +4206,7 @@ export class InstanceAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.admin.instance.v1.Instance|Instance}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancesAsync(
@@ -4267,7 +4267,7 @@ export class InstanceAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listInstancePartitionsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancePartitions(
@@ -4405,7 +4405,7 @@ export class InstanceAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listInstancePartitionsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancePartitionsStream(
@@ -4466,7 +4466,7 @@ export class InstanceAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.admin.instance.v1.InstancePartition|InstancePartition}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancePartitionsAsync(
@@ -4582,7 +4582,7 @@ export class InstanceAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listInstancePartitionOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancePartitionOperations(
@@ -4762,7 +4762,7 @@ export class InstanceAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listInstancePartitionOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancePartitionOperationsStream(
@@ -4866,7 +4866,7 @@ export class InstanceAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.longrunning.Operation|Operation}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listInstancePartitionOperationsAsync(

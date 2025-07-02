@@ -473,7 +473,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.Session|Session}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   createSession(
@@ -591,7 +591,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.BatchCreateSessionsResponse|BatchCreateSessionsResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   batchCreateSessions(
@@ -703,7 +703,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.Session|Session}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getSession(
@@ -811,7 +811,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   deleteSession(
@@ -1018,7 +1018,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.ResultSet|ResultSet}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   executeSql(
@@ -1169,7 +1169,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.ExecuteBatchDmlResponse|ExecuteBatchDmlResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   executeBatchDml(
@@ -1357,7 +1357,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.ResultSet|ResultSet}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   read(
@@ -1482,7 +1482,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.Transaction|Transaction}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   beginTransaction(
@@ -1636,7 +1636,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.CommitResponse|CommitResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   commit(
@@ -1752,7 +1752,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   rollback(
@@ -1910,7 +1910,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.PartitionResponse|PartitionResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   partitionQuery(
@@ -2057,7 +2057,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.v1.PartitionResponse|PartitionResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   partitionRead(
@@ -2257,7 +2257,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Stream}
    *   An object stream which emits {@link protos.google.spanner.v1.PartialResultSet|PartialResultSet} on 'data' event.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#server-streaming | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#server-streaming | documentation }
    *   for more details and examples.
    */
   executeStreamingSql(
@@ -2363,7 +2363,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Stream}
    *   An object stream which emits {@link protos.google.spanner.v1.PartialResultSet|PartialResultSet} on 'data' event.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#server-streaming | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#server-streaming | documentation }
    *   for more details and examples.
    */
   streamingRead(
@@ -2427,7 +2427,7 @@ export class SpannerClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Stream}
    *   An object stream which emits {@link protos.google.spanner.v1.BatchWriteResponse|BatchWriteResponse} on 'data' event.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#server-streaming | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#server-streaming | documentation }
    *   for more details and examples.
    */
   batchWrite(
@@ -2484,7 +2484,7 @@ export class SpannerClient {
    *   Note that it can affect your quota.
    *   We recommend using `listSessionsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listSessions(
@@ -2613,7 +2613,7 @@ export class SpannerClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listSessionsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listSessionsStream(
@@ -2675,7 +2675,7 @@ export class SpannerClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.v1.Session|Session}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listSessionsAsync(

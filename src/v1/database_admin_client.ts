@@ -604,7 +604,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.Database|Database}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getDatabase(
@@ -727,7 +727,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   dropDatabase(
@@ -850,7 +850,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.GetDatabaseDdlResponse|GetDatabaseDdlResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getDatabaseDdl(
@@ -993,7 +993,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.iam.v1.Policy|Policy}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   setIamPolicy(
@@ -1110,7 +1110,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.iam.v1.Policy|Policy}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getIamPolicy(
@@ -1231,7 +1231,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.iam.v1.TestIamPermissionsResponse|TestIamPermissionsResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   testIamPermissions(
@@ -1340,7 +1340,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.Backup|Backup}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getBackup(
@@ -1466,7 +1466,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.Backup|Backup}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   updateBackup(
@@ -1588,7 +1588,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   deleteBackup(
@@ -1717,7 +1717,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.AddSplitPointsResponse|AddSplitPointsResponse}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   addSplitPoints(
@@ -1848,7 +1848,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.BackupSchedule|BackupSchedule}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   createBackupSchedule(
@@ -1975,7 +1975,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.BackupSchedule|BackupSchedule}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   getBackupSchedule(
@@ -2108,7 +2108,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.spanner.admin.database.v1.BackupSchedule|BackupSchedule}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   updateBackupSchedule(
@@ -2235,7 +2235,7 @@ export class DatabaseAdminClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing {@link protos.google.protobuf.Empty|Empty}.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#regular-methods | documentation }
    *   for more details and examples.
    */
   deleteBackupSchedule(
@@ -2404,7 +2404,7 @@ export class DatabaseAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   createDatabase(
@@ -2529,7 +2529,7 @@ export class DatabaseAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkCreateDatabaseProgress(
@@ -2609,7 +2609,7 @@ export class DatabaseAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   updateDatabase(
@@ -2734,7 +2734,7 @@ export class DatabaseAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkUpdateDatabaseProgress(
@@ -2824,7 +2824,7 @@ export class DatabaseAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   updateDatabaseDdl(
@@ -2949,7 +2949,7 @@ export class DatabaseAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkUpdateDatabaseDdlProgress(
@@ -3017,7 +3017,7 @@ export class DatabaseAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   createBackup(
@@ -3142,7 +3142,7 @@ export class DatabaseAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkCreateBackupProgress(
@@ -3218,7 +3218,7 @@ export class DatabaseAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   copyBackup(
@@ -3343,7 +3343,7 @@ export class DatabaseAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkCopyBackupProgress(
@@ -3418,7 +3418,7 @@ export class DatabaseAdminClient {
    *   The first element of the array is an object representing
    *   a long running operation. Its `promise()` method returns a promise
    *   you can `await` for.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   restoreDatabase(
@@ -3543,7 +3543,7 @@ export class DatabaseAdminClient {
    *   The operation name that will be passed.
    * @returns {Promise} - The promise which resolves to an object.
    *   The decoded operation object has result and metadata field to get information from.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#long-running-operations | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations | documentation }
    *   for more details and examples.
    */
   async checkRestoreDatabaseProgress(
@@ -3595,7 +3595,7 @@ export class DatabaseAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listDatabasesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabases(
@@ -3724,7 +3724,7 @@ export class DatabaseAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listDatabasesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabasesStream(
@@ -3776,7 +3776,7 @@ export class DatabaseAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.admin.database.v1.Database|Database}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabasesAsync(
@@ -3872,7 +3872,7 @@ export class DatabaseAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listBackupsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackups(
@@ -4043,7 +4043,7 @@ export class DatabaseAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listBackupsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupsStream(
@@ -4137,7 +4137,7 @@ export class DatabaseAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.admin.database.v1.Backup|Backup}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupsAsync(
@@ -4243,7 +4243,7 @@ export class DatabaseAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listDatabaseOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabaseOperations(
@@ -4419,7 +4419,7 @@ export class DatabaseAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listDatabaseOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabaseOperationsStream(
@@ -4518,7 +4518,7 @@ export class DatabaseAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.longrunning.Operation|Operation}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabaseOperationsAsync(
@@ -4651,7 +4651,7 @@ export class DatabaseAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listBackupOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupOperations(
@@ -4852,7 +4852,7 @@ export class DatabaseAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listBackupOperationsAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupOperationsStream(
@@ -4976,7 +4976,7 @@ export class DatabaseAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.longrunning.Operation|Operation}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupOperationsAsync(
@@ -5029,7 +5029,7 @@ export class DatabaseAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listDatabaseRolesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabaseRoles(
@@ -5159,7 +5159,7 @@ export class DatabaseAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listDatabaseRolesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabaseRolesStream(
@@ -5212,7 +5212,7 @@ export class DatabaseAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.admin.database.v1.DatabaseRole|DatabaseRole}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listDatabaseRolesAsync(
@@ -5266,7 +5266,7 @@ export class DatabaseAdminClient {
    *   Note that it can affect your quota.
    *   We recommend using `listBackupSchedulesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupSchedules(
@@ -5397,7 +5397,7 @@ export class DatabaseAdminClient {
    *   times as needed. Note that it can affect your quota.
    *   We recommend using `listBackupSchedulesAsync()`
    *   method described below for async iteration which you can stop as needed.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupSchedulesStream(
@@ -5451,7 +5451,7 @@ export class DatabaseAdminClient {
    *   When you iterate the returned iterable, each element will be an object representing
    *   {@link protos.google.spanner.admin.database.v1.BackupSchedule|BackupSchedule}. The API will be called under the hood as needed, once per the page,
    *   so you can stop the iteration when you don't need more results.
-   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination | documentation }
+   *   Please see the {@link https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#auto-pagination | documentation }
    *   for more details and examples.
    */
   listBackupSchedulesAsync(
