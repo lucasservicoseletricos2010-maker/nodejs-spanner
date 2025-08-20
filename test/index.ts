@@ -37,7 +37,8 @@ import {
   GetInstanceConfigsOptions,
   GetInstancesOptions,
 } from '../src';
-import {CLOUD_RESOURCE_HEADER} from '../src/common';
+import {CLOUD_RESOURCE_HEADER, AFE_SERVER_TIMING_HEADER} from '../src/common';
+import {MetricsTracerFactory} from '../src/metrics/metrics-tracer-factory';
 import IsolationLevel = protos.google.spanner.v1.TransactionOptions.IsolationLevel;
 const singer = require('./data/singer');
 const music = singer.examples.spanner.music;
@@ -47,6 +48,21 @@ assert.strictEqual(CLOUD_RESOURCE_HEADER, 'google-cloud-resource-prefix');
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const apiConfig = require('../src/spanner_grpc_config.json');
+
+async function disableMetrics(sandbox: sinon.SinonSandbox) {
+  if (
+    Object.prototype.hasOwnProperty.call(
+      process.env,
+      'SPANNER_DISABLE_BUILTIN_METRICS',
+    )
+  ) {
+    sandbox.replace(process.env, 'SPANNER_DISABLE_BUILTIN_METRICS', 'true');
+  } else {
+    sandbox.define(process.env, 'SPANNER_DISABLE_BUILTIN_METRICS', 'true');
+  }
+  await MetricsTracerFactory.resetInstance();
+  MetricsTracerFactory.enabled = false;
+}
 
 function getFake(obj: {}) {
   return obj as {
@@ -116,6 +132,7 @@ const fakeV1: any = {
 function fakeGoogleAuth() {
   return {
     calledWith_: arguments,
+    getProjectId: () => Promise.resolve('project-id'),
   };
 }
 
@@ -183,7 +200,7 @@ describe('Spanner', () => {
     }).Spanner;
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     sandbox = sinon.createSandbox();
     fakeGapicClient = util.noop;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -193,6 +210,7 @@ describe('Spanner', () => {
     fakeV1.SpannerClient = fakeGapicClient;
     fakeCodec.SpannerDate = util.noop;
     fakeCodec.Int = util.noop;
+    await disableMetrics(sandbox);
     spanner = new Spanner(OPTIONS);
     spanner.projectId = OPTIONS.projectId;
     replaceProjectIdTokenOverride = null;
@@ -309,6 +327,12 @@ describe('Spanner', () => {
       assert.strictEqual(spanner.routeToLeaderEnabled, false);
     });
 
+    it('should optionally accept disableBuiltInMetrics', () => {
+      const spanner = new Spanner({disableBuiltInMetrics: true});
+      assert.strictEqual(MetricsTracerFactory.enabled, false);
+      MetricsTracerFactory.enabled = true; // Reset for other tests.
+    });
+
     it('should optionally accept directedReadOptions', () => {
       const fakeDirectedReadOptions = {
         includeReplicas: {
@@ -353,6 +377,7 @@ describe('Spanner', () => {
     it('should set the commonHeaders_', () => {
       assert.deepStrictEqual(spanner.commonHeaders_, {
         [CLOUD_RESOURCE_HEADER]: spanner.projectFormattedName_,
+        [AFE_SERVER_TIMING_HEADER]: 'true',
       });
     });
 
@@ -431,6 +456,104 @@ describe('Spanner', () => {
         assert.strictEqual(config.baseUrl, EMULATOR_HOST);
         assert.strictEqual(options.port, EMULATOR_PORT);
       });
+    });
+  });
+
+  describe('TPC tests', () => {
+    const UNIVERSE_DOMAIN_CONSTANT = 'fake-universe-domain';
+
+    it('should have default universe domain set to `googleapis.com`', () => {
+      try {
+        const spanner = new Spanner();
+        // get default universe domain from spanner object when
+        // neither of univserDomain and universe_domain are set
+        // nor env GOOGLE_CLOUD_UNIVERSE_DOMAIN is set
+        assert.strictEqual(spanner.universeDomain, 'googleapis.com');
+        // GoogleAuthOption's univserseDomain property must be undefined here
+        // as it will get configure to default value in the gax library
+        // please see: https://github.com/googleapis/gax-nodejs/blob/de43edd3524b7f995bd3cf5c34ddead03828b546/gax/src/grpc.ts#L431
+        assert.strictEqual(spanner.options.universeDomain, undefined);
+      } catch (err) {
+        assert.ifError(err);
+      }
+    });
+
+    it('should optionally accept universeDomain', () => {
+      const fakeOption = {
+        universeDomain: UNIVERSE_DOMAIN_CONSTANT,
+      };
+
+      try {
+        const spanner = new Spanner(fakeOption);
+        // get universe domain from spanner object
+        assert.strictEqual(spanner.universeDomain, fakeOption.universeDomain);
+        // GoogleAuthOption's univserseDomain property must be set
+        // to match it with the universe from Auth Client
+        assert.strictEqual(
+          spanner.options.universeDomain,
+          fakeOption.universeDomain,
+        );
+      } catch (err) {
+        assert.ifError(err);
+      }
+    });
+
+    it('should optionally accept universe_domain', () => {
+      const fakeOption = {
+        universe_domain: UNIVERSE_DOMAIN_CONSTANT,
+      };
+
+      try {
+        const spanner = new Spanner(fakeOption);
+        // get universe domain from spanner object
+        assert.strictEqual(spanner.universeDomain, fakeOption.universe_domain);
+        // GoogleAuthOption's univserseDomain property must be set
+        // to match it with the universe from Auth Client
+        assert.strictEqual(
+          spanner.options.universeDomain,
+          fakeOption.universe_domain,
+        );
+      } catch (err) {
+        assert.ifError(err);
+      }
+    });
+
+    it('should set universe domain upon setting env GOOGLE_CLOUD_UNIVERSE_DOMAIN', () => {
+      process.env.GOOGLE_CLOUD_UNIVERSE_DOMAIN = UNIVERSE_DOMAIN_CONSTANT;
+
+      try {
+        const spanner = new Spanner();
+        // get universe domain from spanner object
+        assert.strictEqual(spanner.universeDomain, UNIVERSE_DOMAIN_CONSTANT);
+        // GoogleAuthOption's univserseDomain property must be set
+        // to match it with the universe from Auth Client
+        assert.strictEqual(
+          spanner.options.universeDomain,
+          UNIVERSE_DOMAIN_CONSTANT,
+        );
+      } catch (err) {
+        assert.ifError(err);
+      }
+      delete process.env.GOOGLE_CLOUD_UNIVERSE_DOMAIN;
+    });
+
+    it('should throw an error if universe_domain and universeDomain both are set to different values', () => {
+      const fakeOption = {
+        universeDomain: 'fake-universe-domain-1',
+        universe_domain: 'fake-universe-domain-2',
+      };
+      const fakeError = new Error(
+        'Please set either universe_domain or universeDomain, but not both.',
+      );
+
+      try {
+        const spanner = new Spanner(fakeOption);
+        // this line should never reach client must throw an error.
+        throw new Error('should never reach this line');
+      } catch (err) {
+        assert.deepStrictEqual(err, fakeError);
+      }
+      delete process.env.GOOGLE_CLOUD_UNIVERSE_DOMAIN;
     });
   });
 
@@ -2077,7 +2200,11 @@ describe('Spanner', () => {
         assert.strictEqual(this, FAKE_GAPIC_CLIENT);
         assert.deepStrictEqual(reqOpts, CONFIG.reqOpts);
         assert.notStrictEqual(reqOpts, CONFIG.reqOpts);
-        assert.deepStrictEqual(gaxOpts, expectedGaxOpts);
+
+        // Check that gaxOpts has the expected structure
+        assert.ok(gaxOpts.otherArgs);
+        assert.deepStrictEqual(gaxOpts.otherArgs.headers, CONFIG.headers);
+
         arg(); // done()
       };
 

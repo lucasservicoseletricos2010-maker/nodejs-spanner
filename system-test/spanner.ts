@@ -21,7 +21,6 @@ import pLimit = require('p-limit');
 import concat = require('concat-stream');
 import * as crypto from 'crypto';
 import * as extend from 'extend';
-import * as is from 'is';
 import * as uuid from 'uuid';
 import {
   Backup,
@@ -53,11 +52,13 @@ import CreateInstanceConfigMetadata = google.spanner.admin.instance.v1.CreateIns
 const singer = require('../test/data/singer');
 const music = singer.examples.spanner.music;
 import {util} from 'protobufjs';
+import {MetricsTracerFactory} from '../src/metrics/metrics-tracer-factory';
 import Long = util.Long;
 import {
   CreateQueryPartitionsResponse,
   CreateReadPartitionsResponse,
 } from '../src/batch-transaction';
+import {isNull, isNumber} from '../src/helper';
 const fs = require('fs');
 
 const SKIP_BACKUPS = process.env.SKIP_BACKUPS;
@@ -231,6 +232,7 @@ describe('Spanner', () => {
   }
 
   before(async () => {
+    await MetricsTracerFactory.resetInstance();
     await deleteOldTestInstances();
     if (generateInstanceForTest) {
       await createInstance(instanceId!);
@@ -267,6 +269,7 @@ describe('Spanner', () => {
   });
 
   after(async () => {
+    await MetricsTracerFactory.resetInstance();
     try {
       if (generateInstanceForTest) {
         // Sleep for 30 seconds before cleanup, just in case
@@ -285,7 +288,9 @@ describe('Spanner', () => {
         await Promise.all(
           RESOURCES_TO_CLEAN.filter(
             resource => resource instanceof Instance,
-          ).map(instance => instance.delete(GAX_OPTIONS)),
+          ).map(async instance => {
+            await deleteInstance(instance);
+          }),
         );
       } else {
         /**
@@ -300,6 +305,7 @@ describe('Spanner', () => {
           ),
         );
       }
+      await MetricsTracerFactory.resetInstance();
     } catch (err) {
       console.error('Cleanup failed:', err);
     }
@@ -1239,7 +1245,9 @@ describe('Spanner', () => {
 
       const numericInsertOutOfBounds = (done, dialect, value) => {
         insert({NumericValue: value}, dialect, err => {
-          assert.strictEqual(err.code, grpc.status.FAILED_PRECONDITION);
+          KOKORO_JOB_NAME?.includes('system-test-multiplexed-session')
+            ? assert.strictEqual(err.code, grpc.status.INVALID_ARGUMENT)
+            : assert.strictEqual(err.code, grpc.status.FAILED_PRECONDITION);
           done();
         });
       };
@@ -3021,7 +3029,7 @@ describe('Spanner', () => {
             CustomerId INT64 NOT NULL,
             CustomerName STRING(62) NOT NULL,
             CONSTRAINT FKShoppingCartsCustomerId FOREIGN KEY (CustomerId)
-            REFERENCES Customers (CustomerId) ON DELETE CASCADE,    
+            REFERENCES Customers (CustomerId) ON DELETE CASCADE,
           ) PRIMARY KEY (CartId)`,
       ];
       const fkadc_pg_schema = [
@@ -5065,7 +5073,7 @@ describe('Spanner', () => {
               assert.ifError(err);
 
               const expected = values.map(val => {
-                return is.number(val) ? {value: String(val)} : val;
+                return isNumber(val) ? {value: String(val)} : val;
               });
 
               assert.strictEqual(
@@ -5286,7 +5294,7 @@ describe('Spanner', () => {
               assert.ifError(err);
 
               const expected = values.map(val => {
-                return is.number(val) ? Spanner.float32(val) : val;
+                return isNumber(val) ? Spanner.float32(val) : val;
               });
 
               for (let i = 0; i < rows[0][0].value.length; i++) {
@@ -5444,7 +5452,7 @@ describe('Spanner', () => {
               assert.ifError(err);
 
               const expected = values.map(val => {
-                return is.number(val) ? {value: val + ''} : val;
+                return isNumber(val) ? {value: val + ''} : val;
               });
 
               assert.strictEqual(
@@ -5529,7 +5537,7 @@ describe('Spanner', () => {
               assert.ifError(err);
 
               const expected = values.map(val => {
-                return is.number(val) ? {value: val} : val;
+                return isNumber(val) ? {value: val} : val;
               });
 
               assert.strictEqual(
@@ -5658,7 +5666,7 @@ describe('Spanner', () => {
               assert.ifError(err);
 
               const expected = values.map(val => {
-                return is.number(val) ? {value: val + ''} : val;
+                return isNumber(val) ? {value: val + ''} : val;
               });
 
               assert.strictEqual(
@@ -6103,7 +6111,7 @@ describe('Spanner', () => {
               assert.ifError(err);
 
               const returnedValues = rows[0][0].value.map(val => {
-                return is.null(val) ? val : Spanner.date(val);
+                return isNull(val) ? val : Spanner.date(val);
               });
 
               assert.deepStrictEqual(returnedValues, values);
@@ -7116,7 +7124,7 @@ describe('Spanner', () => {
         const postgreSqlCreateTable = await postgreSqlTable.create(
           `
               CREATE TABLE ${TABLE_NAME} (
-                  "Key" VARCHAR NOT NULL PRIMARY KEY, 
+                  "Key" VARCHAR NOT NULL PRIMARY KEY,
                   "StringValue" VARCHAR
               )`,
           GAX_OPTIONS,
@@ -9185,6 +9193,58 @@ describe('Spanner', () => {
         commitTransaction(done, PG_DATABASE, postgreSqlTable);
       });
 
+      describe('parallel transactions', async () => {
+        async function insertAndCommitTransaction(database, sync, table, key) {
+          await database.runTransactionAsync(async transaction => {
+            // read from table TxnTable
+            await transaction.run('SELECT * FROM TxnTable');
+
+            // insert mutation
+            transaction!.insert(table.name, {
+              Key: key,
+              StringValue: 'v6',
+            });
+
+            // increment the shared counter
+            sync.count++;
+            if (sync.count === sync.target) {
+              // resolve the commit promise so that both the threads can continue to commit the transaction
+              sync.resolveCommitPromise();
+            }
+
+            // wait till the commit promise is resolved
+            await sync.promise;
+
+            // commit transaction once both the transactions are ready to commit
+            await transaction!.commit();
+          });
+        }
+
+        it('should insert and commit transaction when running parallely', async () => {
+          const promises: Promise<void>[] = [];
+          let resolvePromise;
+          const commitPromise = new Promise(
+            resolve => (resolvePromise = resolve),
+          );
+          const sync = {
+            target: 2, // both the transactions to be ready
+            count: 0, // 0 transactions are ready so far
+            promise: commitPromise, // the promise both the transactions wait at
+            resolveCommitPromise: () => resolvePromise(), // the function to resolve the commit promise
+          };
+          // run the transactions in parallel
+          promises.push(
+            insertAndCommitTransaction(DATABASE, sync, googleSqlTable, 'k1100'),
+          );
+          promises.push(
+            insertAndCommitTransaction(DATABASE, sync, googleSqlTable, 'k1101'),
+          );
+
+          // wait for both the transactions to complete their execution
+          await Promise.all(promises);
+        });
+      });
+
       const rollbackTransaction = (done, database) => {
         database.runTransaction((err, transaction) => {
           assert.ifError(err);
@@ -9663,6 +9723,32 @@ describe('Spanner', () => {
             },
           );
         });
+      });
+
+      const handleReadAndMutation = (done, database) => {
+        database.runTransaction(async (err, transaction) => {
+          assert.ifError(err);
+          try {
+            await transaction.run('SELECT abc');
+          } catch (err) {
+            // add a sleep to let the explicit begin call finish
+            await new Promise<void>(resolve => {
+              setTimeout(() => {
+                resolve();
+              }, 4000);
+            });
+          }
+          transaction!.insert('TxnTable', {
+            Key: 'k1003',
+            StringValue: 'mutation',
+          });
+          await transaction.commit();
+          done();
+        });
+      };
+
+      it('GOOGLE_STANDARD_SQL should handle commit retry based on multiplexed enable or not', done => {
+        handleReadAndMutation(done, DATABASE);
       });
     });
 

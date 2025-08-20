@@ -16,11 +16,10 @@
 
 import {DateStruct, PreciseDate} from '@google-cloud/precise-date';
 import {promisifyAll} from '@google-cloud/promisify';
-import {toArray} from './helper';
+import {isEmpty, toArray} from './helper';
 import Long = require('long');
 import {EventEmitter} from 'events';
 import {grpc, CallOptions, ServiceError, Status, GoogleError} from 'google-gax';
-import * as is from 'is';
 import {common as p} from 'protobufjs';
 import {finished, Readable, PassThrough, Stream} from 'stream';
 
@@ -297,6 +296,7 @@ export class Snapshot extends EventEmitter {
     | undefined
     | null;
   id?: Uint8Array | string;
+  multiplexedSessionPreviousTransactionId?: Uint8Array | string;
   ended: boolean;
   metadata?: spannerClient.spanner.v1.ITransaction;
   readTimestamp?: PreciseDate;
@@ -310,6 +310,7 @@ export class Snapshot extends EventEmitter {
   _observabilityOptions?: ObservabilityOptions;
   _traceConfig: traceConfig;
   protected _dbName?: string;
+  protected _mutationKey: spannerClient.spanner.v1.Mutation | null;
 
   /**
    * The transaction ID.
@@ -382,16 +383,135 @@ export class Snapshot extends EventEmitter {
       dbName: this._dbName,
     };
     this._latestPreCommitToken = null;
+    this._mutationKey = null;
   }
 
   protected _updatePrecommitToken(resp: PrecommitTokenProvider): void {
     if (
       this._latestPreCommitToken === null ||
       this._latestPreCommitToken === undefined ||
-      this._latestPreCommitToken!.seqNum! < resp.precommitToken!.seqNum!
+      (resp.precommitToken &&
+        this._latestPreCommitToken!.seqNum! < resp.precommitToken!.seqNum!)
     ) {
       this._latestPreCommitToken = resp.precommitToken;
     }
+  }
+
+  /**
+   * Selects a single representative mutation from a list to be used as the
+   * transaction's `mutationKey`.
+   *
+   * This key is required by Spanner and is sent in the `BeginTransactionRequest`
+   * for read-write transactions that only contain mutations. The selection follows
+   * a two-tiered heuristic to choose the most significant mutation.
+   *
+   * The selection heuristic is as follows:
+   *
+   * 1. Priority of Operation Type: High-priority mutations (`delete`, `update`,
+   * `replace`, `insertOrUpdate`) are always chosen over low-priority
+   * (`insert`) mutations.
+   *
+   * 2. Selection Strategy:
+   * - If any high-priority mutations exist, one is chosen randomly from
+   * that group, ignoring the number of rows.
+   * - If only `insert` mutations exist, the one(s) with the largest number
+   * of rows are identified, and one is chosen randomly from that subset.
+   *
+   * @protected
+   * @param mutations The list of mutations from which to select the key.
+   */
+  protected _setMutationKey(mutations: spannerClient.spanner.v1.Mutation[]) {
+    // return if the list is empty
+    if (mutations.length === 0) {
+      return;
+    }
+
+    // maintain a set of high priority keys
+    const HIGH_PRIORITY_KEYS = new Set([
+      'delete',
+      'update',
+      'replace',
+      'insertOrUpdate',
+    ]);
+
+    // maintain a variable for low priority key
+    const LOW_PRIORITY_KEY = 'insert';
+
+    // Partition mutations into high and low priority groups.
+    const [highPriority, lowPriority] = mutations.reduce(
+      (acc, mutation) => {
+        const key = Object.keys(mutation)[0] as keyof typeof mutation;
+        if (HIGH_PRIORITY_KEYS.has(key)) {
+          acc[0].push(mutation);
+        } else if (key === LOW_PRIORITY_KEY) {
+          acc[1].push(mutation);
+        }
+        // return accumulated mutations list
+        return acc;
+      },
+      [[], []] as [
+        spannerClient.spanner.v1.Mutation[],
+        spannerClient.spanner.v1.Mutation[],
+      ],
+    );
+
+    // Apply the selection logic based on the rules.
+    if (highPriority.length > 0) {
+      // RULE 1: If high-priority keys exist, pick one randomly.
+      const randomIndex = Math.floor(Math.random() * highPriority.length);
+      this._mutationKey = highPriority[randomIndex];
+    } else if (lowPriority.length > 0) {
+      // RULE 2: If only 'insert' key(s) exist, find the one with
+      // highest number of values
+      const {bestCandidates} = lowPriority.reduce(
+        (acc, mutation) => {
+          const size = mutation.insert?.values?.length || 0;
+
+          if (size > acc.maxSize) {
+            // New largest size found, start a new list
+            return {maxSize: size, bestCandidates: [mutation]};
+          }
+          if (size === acc.maxSize) {
+            // Same size as current max, add to list
+            acc.bestCandidates.push(mutation);
+          }
+          // return accumulated mutations list
+          return acc;
+        },
+        {
+          maxSize: -1,
+          bestCandidates: [] as spannerClient.spanner.v1.Mutation[],
+        },
+      );
+
+      // Pick randomly from the largest 'insert' mutation(s).
+      const randomIndex = Math.floor(Math.random() * bestCandidates.length);
+      this._mutationKey = bestCandidates[randomIndex];
+    } else {
+      // No mutations to select from.
+      this._mutationKey = null;
+    }
+  }
+
+  /**
+   * Modifies transaction selector to include the multiplexed session previous
+   * transaction id.
+   * This is essential for operations that use an `inline begin`.
+   * @protected
+   * @param transaction The transaction selector object that will be mutated
+   * to include the multiplexed session previous transaction id.
+   */
+  protected _setPreviousTransactionId(
+    transaction: spannerClient.spanner.v1.ITransactionSelector,
+  ): void {
+    transaction.begin!.readWrite! = Object.assign(
+      {},
+      transaction.begin!.readWrite! || {},
+      {
+        multiplexedSessionPreviousTransactionId:
+          this.multiplexedSessionPreviousTransactionId,
+      },
+    );
   }
 
   /**
@@ -452,10 +572,21 @@ export class Snapshot extends EventEmitter {
 
     const session = this.session.formattedName_!;
     const options = this._options;
+    if (
+      this.multiplexedSessionPreviousTransactionId &&
+      (this.session.parent as Database).isMuxEnabledForRW_
+    ) {
+      options.readWrite!.multiplexedSessionPreviousTransactionId =
+        this.multiplexedSessionPreviousTransactionId;
+    }
     const reqOpts: spannerClient.spanner.v1.IBeginTransactionRequest = {
       session,
       options,
     };
+
+    if (this._mutationKey) {
+      reqOpts.mutationKey = this._mutationKey;
+    }
 
     // Only hand crafted read-write transactions will be able to set a
     // transaction tag for the BeginTransaction RPC. Also, this.requestOptions
@@ -700,6 +831,14 @@ export class Snapshot extends EventEmitter {
       transaction.begin = this._options;
     } else {
       transaction.singleUse = this._options;
+    }
+
+    if (
+      !this.id &&
+      this._options.readWrite &&
+      (this.session.parent as Database).isMuxEnabledForRW_
+    ) {
+      this._setPreviousTransactionId(transaction);
     }
 
     const directedReadOptions = this._getDirectedReadOptions(
@@ -1308,6 +1447,14 @@ export class Snapshot extends EventEmitter {
       } else {
         transaction.singleUse = this._options;
       }
+
+      if (
+        !this.id &&
+        this._options.readWrite &&
+        (this.session.parent as Database).isMuxEnabledForRW_
+      ) {
+        this._setPreviousTransactionId(transaction);
+      }
       delete query.gaxOptions;
       delete query.json;
       delete query.jsonOptions;
@@ -1491,7 +1638,7 @@ export class Snapshot extends EventEmitter {
       });
     }
 
-    if (is.empty(keySet)) {
+    if (isEmpty(keySet)) {
       keySet.all = true;
     }
 
@@ -1539,7 +1686,7 @@ export class Snapshot extends EventEmitter {
 
     // If we didn't detect a convenience format, we'll just assume that
     // they passed in a protobuf timestamp.
-    if (is.empty(readOnly)) {
+    if (isEmpty(readOnly)) {
       Object.assign(readOnly, options);
     }
 
@@ -1578,7 +1725,7 @@ export class Snapshot extends EventEmitter {
       params.fields = fields;
     }
 
-    if (!is.empty(typeMap)) {
+    if (!isEmpty(typeMap)) {
       Object.keys(typeMap).forEach(param => {
         const type = typeMap[param];
         paramTypes[param] = codec.createTypeObject(type);
@@ -2015,6 +2162,14 @@ export class Transaction extends Dml {
       transaction.begin = this._options;
     }
 
+    if (
+      !this.id &&
+      this._options.readWrite &&
+      (this.session.parent as Database).isMuxEnabledForRW_
+    ) {
+      this._setPreviousTransactionId(transaction);
+    }
+
     const requestOptionsWithTag = this.configureTagOptions(
       false,
       this.requestOptions?.transactionTag ?? undefined,
@@ -2233,6 +2388,9 @@ export class Transaction extends Dml {
         } else if (!this._useInRunner) {
           reqOpts.singleUseTransaction = this._options;
         } else {
+          if ((this.session.parent as Database).isMuxEnabledForRW_) {
+            this._setMutationKey(mutations);
+          }
           this.begin().then(
             () => {
               this.commit(options, (err, resp) => {

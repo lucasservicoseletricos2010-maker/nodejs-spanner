@@ -94,6 +94,11 @@ import {
   injectRequestIDIntoError,
   nextSpannerClientId,
 } from './request_id_header';
+import {PeriodicExportingMetricReader} from '@opentelemetry/sdk-metrics';
+import {MetricInterceptor} from './metrics/interceptor';
+import {CloudMonitoringMetricsExporter} from './metrics/spanner-metrics-exporter';
+import {MetricsTracerFactory} from './metrics/metrics-tracer-factory';
+import {MetricsTracer} from './metrics/metrics-tracer';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const gcpApiConfig = require('./spanner_grpc_config.json');
@@ -145,6 +150,7 @@ export type GetInstanceConfigOperationsCallback = PagedCallback<
  * Indicates which replicas or regions should be used for non-transactional reads or queries.
  * DirectedReadOptions won't be set for readWrite transactions"
  * @property {ObservabilityOptions} [observabilityOptions] Sets the observability options to be used for OpenTelemetry tracing
+ * @property {boolean} [disableBuiltInMetrics=True] If set to true, built-in metrics will be disabled.
  */
 export interface SpannerOptions extends GrpcClientOptions {
   apiEndpoint?: string;
@@ -155,7 +161,19 @@ export interface SpannerOptions extends GrpcClientOptions {
   directedReadOptions?: google.spanner.v1.IDirectedReadOptions | null;
   defaultTransactionOptions?: Pick<RunTransactionOptions, 'isolationLevel'>;
   observabilityOptions?: ObservabilityOptions;
+  disableBuiltInMetrics?: boolean;
   interceptors?: any[];
+  /**
+   * The Trusted Cloud Domain (TPC) DNS of the service used to make requests.
+   * Defaults to `googleapis.com`.
+   * We support both camelCase and snake_case for the universe domain.
+   * Customer may set any of these as both the options are same,
+   * they both points to universe endpoint.
+   * There is no preference for any of these option; however exception will be
+   * thrown if both are set to different values.
+   */
+  universe_domain?: string;
+  universeDomain?: string;
 }
 export interface RequestConfig {
   client: string;
@@ -205,6 +223,45 @@ export type TranslateEnumKeys<
 > = {
   [P in keyof T]: P extends U ? EnumKey<E> | null | undefined : T[P];
 };
+
+/**
+ * Retrieves the universe domain.
+ *
+ * This function checks for a universe domain in the following order:
+ * 1. The `universeDomain` property within the provided spanner options.
+ * 2. The `universe_domain` property within the provided spanner options.
+ * 3. The `GOOGLE_CLOUD_UNIVERSE_DOMAIN` environment variable.
+ * 4. If none of the above properties will be set, it will fallback to `googleapis.com`.
+ *
+ * For consistency with the Auth client, if the `universe_domain` option or the
+ * `GOOGLE_CLOUD_UNIVERSE_DOMAIN` env variable is used, this function will also set the
+ * `universeDomain` property within the provided `SpannerOptions` object. This ensures the
+ * Spanner client's universe domain aligns with the universe configured for authentication.
+ *
+ * @param {SpannerOptions} options - The Spanner client options.
+ * @returns {string} The universe domain.
+ */
+function getUniverseDomain(options: SpannerOptions): string {
+  const universeDomainEnvVar =
+    typeof process === 'object' && typeof process.env === 'object'
+      ? process.env['GOOGLE_CLOUD_UNIVERSE_DOMAIN']
+      : undefined;
+  const universeDomain =
+    options?.universeDomain ??
+    options?.universe_domain ??
+    universeDomainEnvVar ??
+    'googleapis.com';
+  // if the options.universe_domain/GOOGLE_CLOUD_UNIVERSE_DOMAIN env variable is set,
+  // set its value to the Spanner `universeDomain` options
+  // to match it with the universe from Auth Client
+  if (
+    !options?.universeDomain &&
+    (options?.universe_domain || process.env.GOOGLE_CLOUD_UNIVERSE_DOMAIN)
+  ) {
+    options.universeDomain = universeDomain;
+  }
+  return universeDomain;
+}
 
 /**
  * [Cloud Spanner](https://cloud.google.com/spanner) is a highly scalable,
@@ -259,6 +316,9 @@ class Spanner extends GrpcService {
   directedReadOptions: google.spanner.v1.IDirectedReadOptions | null;
   defaultTransactionOptions: RunTransactionOptions;
   _observabilityOptions: ObservabilityOptions | undefined;
+  private _universeDomain: string;
+  private _isInSecureCredentials: boolean;
+  private static _isAFEServerTimingEnabled: boolean | undefined;
   readonly _nthClientId: number;
 
   /**
@@ -273,6 +333,30 @@ class Spanner extends GrpcService {
     google.spanner.admin.database.v1.DatabaseDialect.POSTGRESQL;
   static GOOGLE_STANDARD_SQL =
     google.spanner.admin.database.v1.DatabaseDialect.GOOGLE_STANDARD_SQL;
+
+  /**
+   * Returns whether AFE (Application Frontend Extension) server timing is enabled.
+   *
+   * This method checks the value of the environment variable
+   * `SPANNER_DISABLE_AFE_SERVER_TIMING`. If the variable is explicitly set to the
+   * string `'true'`, then AFE server timing is considered disabled, and this method
+   * returns `false`. For all other values (including if the variable is unset),
+   * the method returns `true`.
+   *
+   * @returns {boolean} `true` if AFE server timing is enabled; otherwise, `false`.
+   */
+  public static isAFEServerTimingEnabled = (): boolean => {
+    if (this._isAFEServerTimingEnabled === undefined) {
+      this._isAFEServerTimingEnabled =
+        process.env['SPANNER_DISABLE_AFE_SERVER_TIMING'] !== 'true';
+    }
+    return this._isAFEServerTimingEnabled;
+  };
+
+  /** Resets the cached value (use in tests if env changes). */
+  public static _resetAFEServerTimingForTest(): void {
+    this._isAFEServerTimingEnabled = undefined;
+  }
 
   /**
    * Gets the configured Spanner emulator host from an environment variable.
@@ -351,6 +435,16 @@ class Spanner extends GrpcService {
         };
     delete options.defaultTransactionOptions;
 
+    if (
+      options?.universe_domain &&
+      options?.universeDomain &&
+      options?.universe_domain !== options?.universeDomain
+    ) {
+      throw new Error(
+        'Please set either universe_domain or universeDomain, but not both.',
+      );
+    }
+
     const emulatorHost = Spanner.getSpannerEmulatorHost();
     if (
       emulatorHost &&
@@ -361,12 +455,12 @@ class Spanner extends GrpcService {
       options.port = emulatorHost.port;
       options.sslCreds = grpc.credentials.createInsecure();
     }
+
+    const universeEndpoint = getUniverseDomain(options);
+    const spannerUniverseEndpoint = 'spanner.' + universeEndpoint;
     const config = {
       baseUrl:
-        options.apiEndpoint ||
-        options.servicePath ||
-        // TODO: for TPC, this needs to support universeDomain
-        'spanner.googleapis.com',
+        options.apiEndpoint || options.servicePath || spannerUniverseEndpoint,
       protosDir: path.resolve(__dirname, '../protos'),
       protoServices: {
         Operations: {
@@ -383,6 +477,7 @@ class Spanner extends GrpcService {
       this.routeToLeaderEnabled = false;
     }
 
+    this._isInSecureCredentials = options.sslCreds?._isSecure() === false;
     this.options = options;
     this.auth = new GoogleAuth(this.options);
     this.clients_ = new Map();
@@ -399,6 +494,12 @@ class Spanner extends GrpcService {
     );
     ensureInitialContextManagerSet();
     this._nthClientId = nextSpannerClientId();
+    this._universeDomain = universeEndpoint;
+    this.configureMetrics_(options.disableBuiltInMetrics);
+  }
+
+  get universeDomain() {
+    return this._universeDomain;
   }
 
   /**
@@ -458,6 +559,9 @@ class Spanner extends GrpcService {
         client.operationsClient.close();
       }
       client.close();
+    });
+    cleanup().catch(err => {
+      console.error('Error occured during cleanup: ', err);
     });
   }
 
@@ -1508,6 +1612,26 @@ class Spanner extends GrpcService {
   }
 
   /**
+   * Setup the OpenTelemetry metrics capturing for service metrics to Google Cloud Monitoring.
+   */
+  configureMetrics_(disableBuiltInMetrics?: boolean) {
+    const metricsEnabled =
+      process.env.SPANNER_DISABLE_BUILTIN_METRICS !== 'true' &&
+      !disableBuiltInMetrics &&
+      !this._isInSecureCredentials;
+    MetricsTracerFactory.enabled = metricsEnabled;
+    if (metricsEnabled) {
+      const factory = MetricsTracerFactory.getInstance(this.projectId);
+      const periodicReader = new PeriodicExportingMetricReader({
+        exporter: new CloudMonitoringMetricsExporter({auth: this.auth}),
+        exportIntervalMillis: 60000,
+      });
+      // Retrieve the MeterProvider to trigger construction
+      factory!.getMeterProvider([periodicReader]);
+    }
+  }
+
+  /**
    * Prepare a gapic request. This will cache the GAX client and replace
    * {{projectId}} placeholders, if necessary.
    *
@@ -1569,6 +1693,10 @@ class Spanner extends GrpcService {
       });
       // Attach the x-goog-spanner-request-id to the currently active span.
       attributeXGoogSpannerRequestIdToActiveSpan(config);
+      const interceptors: any[] = [];
+      if (MetricsTracerFactory.enabled) {
+        interceptors.push(MetricInterceptor);
+      }
       const requestFn = gaxClient[config.method].bind(
         gaxClient,
         reqOpts,
@@ -1576,6 +1704,9 @@ class Spanner extends GrpcService {
         extend(true, {}, config.gaxOpts, {
           otherArgs: {
             headers: config.headers,
+            options: {
+              interceptors: interceptors,
+            },
           },
         }),
       );
@@ -1645,21 +1776,51 @@ class Spanner extends GrpcService {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   request(config: any, callback?: any): any {
+    let metricsTracer: MetricsTracer | null = null;
+    if (config.client === 'SpannerClient') {
+      metricsTracer =
+        MetricsTracerFactory?.getInstance()?.createMetricsTracer(
+          config.method,
+          config.reqOpts.session ?? config.reqOpts.database,
+          config.headers['x-goog-spanner-request-id'],
+        ) ?? null;
+    }
+    metricsTracer?.recordOperationStart();
     if (typeof callback === 'function') {
       this.prepareGapicRequest_(config, (err, requestFn) => {
         if (err) {
           callback(err);
+          metricsTracer?.recordOperationCompletion();
         } else {
-          requestFn(callback);
+          const wrappedCallback = (...args) => {
+            metricsTracer?.recordOperationCompletion();
+            callback(...args);
+          };
+          requestFn(wrappedCallback);
         }
       });
     } else {
       return new Promise((resolve, reject) => {
         this.prepareGapicRequest_(config, (err, requestFn) => {
           if (err) {
+            metricsTracer?.recordOperationCompletion();
             reject(err);
           } else {
-            resolve(requestFn());
+            const result = requestFn();
+            if (result && typeof result.then === 'function') {
+              result
+                .then(val => {
+                  metricsTracer?.recordOperationCompletion();
+                  resolve(val);
+                })
+                .catch(error => {
+                  metricsTracer?.recordOperationCompletion();
+                  reject(error);
+                });
+            } else {
+              metricsTracer?.recordOperationCompletion();
+              resolve(result);
+            }
           }
         });
       });
@@ -1679,6 +1840,16 @@ class Spanner extends GrpcService {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   requestStream(config): any {
+    let metricsTracer: MetricsTracer | null = null;
+    if (config.client === 'SpannerClient') {
+      metricsTracer =
+        MetricsTracerFactory?.getInstance()?.createMetricsTracer(
+          config.method,
+          config.reqOpts.session ?? config.reqOpts.database,
+          config.headers['x-goog-spanner-request-id'],
+        ) ?? null;
+    }
+    metricsTracer?.recordOperationStart();
     const stream = streamEvents(through.obj());
     stream.once('reading', () => {
       this.prepareGapicRequest_(config, (err, requestFn) => {
@@ -1692,6 +1863,12 @@ class Spanner extends GrpcService {
           })
           .pipe(stream);
       });
+    });
+    stream.on('finish', () => {
+      stream.destroy();
+    });
+    stream.on('close', () => {
+      metricsTracer?.recordOperationCompletion();
     });
     return stream;
   }
@@ -1977,6 +2154,32 @@ class Spanner extends GrpcService {
     return codec.Struct.fromJSON(value);
   }
 }
+
+let cleanupCalled = false;
+const cleanup = async () => {
+  if (cleanupCalled) return;
+  cleanupCalled = true;
+  await MetricsTracerFactory.resetInstance();
+};
+
+// For signals (let process exit naturally)
+process.on('SIGINT', async () => {
+  await cleanup();
+});
+process.on('SIGTERM', async () => {
+  await cleanup();
+});
+
+// For natural exit (Node will NOT wait for async, so we must block the event loop)
+process.on('beforeExit', () => {
+  const done = cleanup();
+  if (done && typeof done.then === 'function') {
+    // Handle promise rejection
+    done.catch(err => {
+      console.error('Cleanup error before exit:', err);
+    });
+  }
+});
 
 /*! Developer Documentation
  *
